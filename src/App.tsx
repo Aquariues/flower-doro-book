@@ -1,122 +1,54 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { BrowserRouter, Link, NavLink, Route, Routes } from 'react-router-dom'
+import BookPage from './pages/BookPage'
+import Home from './pages/Home'
+import type { Locale } from './types'
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [locale, setLocale] = useState<Locale>('en')
+
+  const navLinkClass = ({ isActive }: { isActive: boolean }) =>
+    `rounded-full px-3 py-1.5 text-sm font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-leaf ${
+      isActive ? 'bg-leaf-soft text-leaf' : 'text-ink-muted hover:text-ink'
+    }`
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <BrowserRouter>
+      <div className="mx-auto flex min-h-screen max-w-4xl flex-col px-4 py-6 sm:px-8">
+        <header className="mb-6 flex items-center justify-between gap-3">
+          <Link
+            to="/"
+            className="font-display text-lg text-ink focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-leaf"
+          >
+            FlowerDoro
+          </Link>
+          <nav className="flex items-center gap-1 sm:gap-2" aria-label="main">
+            <NavLink to="/" end className={navLinkClass}>
+              {locale === 'vi' ? 'Trang chủ' : 'Home'}
+            </NavLink>
+            <NavLink to="/book" className={navLinkClass}>
+              {locale === 'vi' ? 'Sổ tay hoa' : 'Flower Book'}
+            </NavLink>
+            <button
+              onClick={() => setLocale(locale === 'en' ? 'vi' : 'en')}
+              className="ml-1 rounded-full border border-paper-edge bg-paper-deep px-3 py-1.5 text-sm font-medium text-ink transition-colors hover:border-leaf focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-leaf"
+            >
+              {locale === 'en' ? 'VI' : 'EN'}
+            </button>
+          </nav>
+        </header>
 
-      <div className="ticks"></div>
+        <main className="flex-1">
+          <Routes>
+            <Route path="/" element={<Home locale={locale} />} />
+            <Route path="/book" element={<BookPage locale={locale} />} />
+          </Routes>
+        </main>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+        <footer className="mt-8 border-t border-paper-edge pt-4 text-center text-xs text-ink-muted">
+          FlowerDoro · {locale === 'vi' ? 'Vườn hoa của sự tập trung' : 'A garden grown from focus'}
+        </footer>
+      </div>
+    </BrowserRouter>
   )
 }
-
-export default App
